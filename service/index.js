@@ -1,52 +1,62 @@
 /**
  * Created by hellocob on 17-3-27.
  */
-const api = require('../api/index');
-const http = require('http');
 
-const port = defaultPort(process.env.PORT || '8081');
-api.set('port', port);
+var app = require('../api');
+var debug = require('debug')('helloexpress:server');
+var http = require('http');
 
 /**
- * 创建http 服务.
+ * Get port from environment and store in Express.
  */
 
-const server = http.createServer(api);
+var port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+var server = http.createServer(app);
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
 
 server.listen(port);
+server.on('error', onError);
 server.on('listening', onListening);
-server.on('error', onErr);
 
-function defaultPort(val) {
-    const port = parseInt(val, 10);
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+    var port = parseInt(val, 10);
+
     if (isNaN(port)) {
+        // named pipe
         return val;
     }
+
     if (port >= 0) {
+        // port number
         return port;
     }
-    return false;
 
+    return false;
 }
 
 /**
- * Event listener for HTTP server "listening" event.
+ * Event listener for HTTP server "error" event.
  */
 
-function onListening() {
-    const addr = server.address();
-    const bind = typeof addr === 'string'
-        ? 'pipe ' + addr
-        : 'port ' + addr.port;
-    console.log('API listening on ' + bind);
-}
-
-function onErr(error) {
+function onError(error) {
     if (error.syscall !== 'listen') {
         throw error;
     }
 
-    const bind = typeof port === 'string'
+    var bind = typeof port === 'string'
         ? 'Pipe ' + port
         : 'Port ' + port;
 
@@ -65,3 +75,14 @@ function onErr(error) {
     }
 }
 
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+    var addr = server.address();
+    var bind = typeof addr === 'string'
+        ? 'pipe ' + addr
+        : 'port ' + addr.port;
+    debug('Listening on ' + bind);
+}
