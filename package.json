@@ -1,0 +1,20 @@
+{
+  "name": "etodos",
+  "version": "0.0.1",
+  "description": "用于实现基于ebookchain区块链技术的todo协作工具。",
+  "main": "app.js",
+  "scripts": {
+    "start": "npm run dev",
+    "service": "node ./service/index.js",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git.ebookchain.net"
+  },
+  "keywords": [
+    "hellocob"
+  ],
+  "author": "cob",
+  "license": ""
+}
